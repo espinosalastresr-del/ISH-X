@@ -1,0 +1,25 @@
+name: iSH-X Bootstrap
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  repository-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify project contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f README.md
+          test -f docs/ARCHITECTURE.md
+          test -f docs/DEVELOPMENT.md
+          grep -q "ARM64" docs/ARCHITECTURE.md
+          grep -q "Gadget JIT" docs/ARCHITECTURE.md
+          grep -q "StikDebug" docs/ARCHITECTURE.md
+          grep -q "NativeBridge" docs/ARCHITECTURE.md
+          grep -q "fake root" docs/ARCHITECTURE.md
+          echo "iSH-X bootstrap contract OK"
